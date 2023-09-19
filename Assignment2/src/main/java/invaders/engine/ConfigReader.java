@@ -7,6 +7,8 @@ import java.util.List;
 
 import invaders.entities.Enemy;
 import invaders.entities.Bunkers;
+import invaders.entities.ConcreteEnemyBuilder;
+import invaders.entities.EnemyBuilder;
 import invaders.physics.Vector2D;
 
 import org.json.simple.JSONArray;
@@ -131,7 +133,8 @@ public class ConfigReader {
 
 			// Create an Enemy object and add it to the list
 			Vector2D enemyPosition = new Vector2D(enemyXpos, enemyYpos);
-			Enemy enemy = new Enemy(enemyPosition, projectileStrategy);
+			EnemyBuilder enemyBuilder = new ConcreteEnemyBuilder();
+			Enemy enemy = new ConcreteEnemyBuilder().setPosition(enemyPosition).setProjectileType(projectileStrategy).build();
 			enemies.add(enemy);
 		}
 
