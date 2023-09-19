@@ -24,7 +24,7 @@ public class GameEngine {
 	private boolean right;
 	private ConfigReader configReader = new ConfigReader().parse("src/main/resources/config.json");
 	private List<Enemy> enemies;
-	public int enemyProjectileCount = 0;
+	public int enemyProjectileCount = 0; // only 3 enemies' projectile allow on screen
 
 	public GameEngine(String config){
 		// read the config here
@@ -36,10 +36,10 @@ public class GameEngine {
 		long playerPosX = configReader.getPlayerPositionX();
 		long playerPosY = configReader.getPlayerPositionY();
 
-		// Retrieve enemy section
+		// Retrieve enemy section in a list
 		enemies = configReader.readEnemyData();
 
-		// Retrieve bunkers section
+		// Retrieve bunkers section in a list
 		List<Bunkers> bunkers = new ArrayList<>();
 		bunkers = configReader.readBunkerData();
 
@@ -55,7 +55,7 @@ public class GameEngine {
 			renderables.add(bunkers.get(i));
 		}
 		// Create player
-		player = new Player(new Vector2D(playerPosX, playerPosY)); //		player = new Player(new Vector2D(200, 380));
+		player = new Player(new Vector2D(playerPosX, playerPosY));
 		renderables.add(player);
 	}
 
@@ -68,26 +68,29 @@ public class GameEngine {
 		int gameSizeY = configReader.getGameSizeY();
 
 		movePlayer();
-
-		if (enemyProjectileCount < 3) {
-			int index = new Random().nextInt(enemies.size());
-			enemies.get(index).shoot();
-			renderables.add(enemies.get(index).getEnemyProjectile());
-			enemyProjectileCount += 1;
-		}
-
-
-
+		List<Renderable> roToDelete = new ArrayList<>();
 		for(GameObject go: gameobjects){
 			go.update();
 		}
 
-		// Add playerProjectile to renderables if it exists: Hung
+		// Add enemies projectile to renderables list
+		// Only three projectile available at a time
+		// It need to be in the renderables list to make a shot
+		if (enemyProjectileCount < 3) {
+			int index = new Random().nextInt(enemies.size());
+			if (renderables.contains(enemies.get(index))) {
+				enemies.get(index).shoot();
+				renderables.add(enemies.get(index).getEnemyProjectile());
+				enemyProjectileCount += 1;
+			}
+		}
+
+		// Add playerProjectile to renderables if it exists
 		if (player.getPlayerProjectile() != null) {
 			renderables.add(player.getPlayerProjectile());
 		}
 
-		// If player's projectile go out of the screen, then delete it
+		// If player's projectile go out of the screen/collide, then delete it
 		Iterator<Renderable> it = renderables.iterator();
 		while (it.hasNext()) {
 			Renderable ro = it.next();
@@ -99,28 +102,27 @@ public class GameEngine {
 				}
 				continue;
 			}
-			System.out.println("check");
-			if (ro instanceof Enemy enemy) {
-				System.out.println("check1");
-				if (enemy.getEnemyProjectile() != null) {
-					System.out.println("check2");
-					if (enemy.getEnemyProjectile().getPosition().getY() >= gameSizeY) {
-						System.out.println("check3fadssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
-						it.remove();
-						enemy.setEnemyProjectile(null);
-
-						enemyProjectileCount -=1;
-						System.out.println(enemyProjectileCount);
-					}
-				}
-			}
-			if (ro instanceof Projectile) {
+//			if (ro instanceof Enemy enemy) {
+//				if (enemy.getEnemyProjectile() != null) {
+//					if (enemy.getEnemyProjectile().getPosition().getY() >= gameSizeY) {
+//						it.remove();
+//						enemy.setEnemyProjectile(null);
+//						enemyProjectileCount -=1;
+//						System.out.println(enemyProjectileCount);
+//					}
+//				}
+//			}
+			if (ro instanceof EnemyFastProjectile enemyFastProjectile || ro instanceof EnemySlowProjectile enemySlowProjectile) {
 				((Moveable) ro).down();
+				if (ro.getPosition().getY() >= gameSizeY) {
+					it.remove();
+					enemyProjectileCount -=1;
+				}
 			}
 		}
 
 		//
-		List<Renderable> roToDelete = new ArrayList<>();
+
 		Bunkers bunker_remove = null;
 		for (Renderable ro1 : renderables) {
 			if (ro1 instanceof Projectile projectile) {
@@ -133,7 +135,7 @@ public class GameEngine {
 						}
 					}
 
-					if (ro2 instanceof Enemy enemy) {
+					if (ro2 instanceof Enemy enemy && projectile instanceof PlayerProjectile) {
 						if (enemy.isColliding(projectile)) {
 							roToDelete.add(ro2);
 						}
@@ -150,6 +152,7 @@ public class GameEngine {
 			}
 		}
 
+		// Remove bunkers if it hit when in red state
 		if (bunker_remove != null) {
 			bunker_remove.takeDamage(2.0);
 			if (bunker_remove.getCurrenState() == null) {

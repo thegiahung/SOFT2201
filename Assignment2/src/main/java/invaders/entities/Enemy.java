@@ -16,11 +16,12 @@ public class Enemy implements Moveable, Damagable, Renderable, Collider {
     private final Animator anim = null;
     private double health = 100;
 
-    private final double width = 25;
+    private final double width = 60;
     private final double height = 30;
     private final Image image;
     private final String projectileType;
-    private final double projectileOffset = 10;
+    private final double projectileXOffset = 10;
+    private final double projectileYOffset = 30;
     private Projectile enemyProjectile;
 
     public Enemy(Vector2D position, String projectileType){
@@ -65,10 +66,9 @@ public class Enemy implements Moveable, Damagable, Renderable, Collider {
     }
 
     public void shoot(){
-        // todo
-        // Check if there is no active player projectile
+        // Check if there is enemy still alive before shooting
         if (isAlive()) {
-            enemyProjectile = ProjectileFactory.createProjectile(projectileType, new Vector2D(this.getPosition().getX() + projectileOffset, this.getPosition().getY() + projectileOffset), ProjectileOwner.ENEMY);
+            enemyProjectile = ProjectileFactory.createProjectile(projectileType, new Vector2D(this.getPosition().getX() + projectileXOffset, this.getPosition().getY() + projectileYOffset), ProjectileOwner.ENEMY);
         }
 
     }

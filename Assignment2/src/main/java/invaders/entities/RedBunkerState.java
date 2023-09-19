@@ -15,6 +15,5 @@ public class RedBunkerState extends BunkerState {
     @Override
     public void handleDamage() {
         bunkers.setState(null);
-        System.out.println("this call 1 time");
     }
 }
