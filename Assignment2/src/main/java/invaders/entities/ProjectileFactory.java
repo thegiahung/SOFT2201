@@ -13,12 +13,10 @@ public class ProjectileFactory {
 
         switch (type) {
             case "fast_straight":
-//                projectile = new EnemyFastProjectile(position, 2);
-                projectile = EnemyProjectileContext.context(new EnemyFastProjectile(position, 2));
+                projectile = new EnemyFastProjectile(position, 2);
                 break;
             case "slow_straight":
-//                projectile = new EnemySlowProjectile(position, 1);
-                projectile = EnemyProjectileContext.context(new EnemySlowProjectile(position, 1));
+                projectile = new EnemySlowProjectile(position, 1);
                 break;
         }
         return projectile;

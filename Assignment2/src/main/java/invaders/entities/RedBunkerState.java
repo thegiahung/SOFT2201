@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 import java.io.File;
 
 public class RedBunkerState extends BunkerState {
-    private Image image = new Image(new File("src/main/resources/bunker.png").toURI().toString(), 25, 30, true, true);;
     Bunkers bunkers;
 
     public RedBunkerState(Bunkers bunkers) {

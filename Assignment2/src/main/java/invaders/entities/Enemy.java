@@ -16,7 +16,7 @@ public class Enemy implements Moveable, Damagable, Renderable, Collider {
     private final Animator anim = null;
     private double health = 100;
 
-    private final double width = 60;
+    private final double width = 25;
     private final double height = 30;
     private final Image image;
     private final String projectileType;
@@ -25,7 +25,7 @@ public class Enemy implements Moveable, Damagable, Renderable, Collider {
     private Projectile enemyProjectile;
 
     public Enemy(Vector2D position, String projectileType){
-        this.image = new Image(new File("src/main/resources/enemy.png").toURI().toString(), width, height, true, true);
+        this.image = new Image(new File("src/main/resources/enemy.png").toURI().toString(), width, height, false, true);
         this.position = position;
         this.projectileType = projectileType;
     }

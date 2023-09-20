@@ -22,7 +22,7 @@ public class Bunkers implements Damagable, Renderable, Collider {
     public Bunkers(Vector2D position, double width, double height){
         this.width = width;
         this.height = height;
-        this.image = new Image(new File("src/main/resources/bunker.png").toURI().toString(), width, height, true, true);
+        this.image = new Image(new File("src/main/resources/bunker.png").toURI().toString(), width, height, false, true);
         this.position = position;
         this.currenState = new GreenBunkerState(this);
     }
@@ -72,7 +72,7 @@ public class Bunkers implements Damagable, Renderable, Collider {
     }
 
     public void setImage(String path) {
-        this.image = new Image(new File(path).toURI().toString(), width, height, true, true);
+        this.image = new Image(new File(path).toURI().toString(), width, height, false, true);
         // Implement this method to set the bunker image
     }
 
