@@ -68,6 +68,25 @@ public class GameEngine {
 		int gameSizeY = configReader.getGameSizeY();
 
 		movePlayer();
+
+		// Make enemy move down and change direction together once it hit the wall
+		boolean shouldChangeDirection = false;
+		// Inside the game loop:
+		for (Enemy enemy : enemies) {
+			enemy.moveSideways();
+			if (enemy.shouldChangeDirection()) {
+				shouldChangeDirection = true;
+			}
+		}
+
+		if (shouldChangeDirection) {
+			for (Enemy enemy : enemies) {
+				enemy.down();
+				enemy.changeDirection();
+			}
+			shouldChangeDirection = false;
+		}
+
 		List<Renderable> roToDelete = new ArrayList<>();
 		for(GameObject go: gameobjects){
 			go.update();

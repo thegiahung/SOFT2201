@@ -1,5 +1,6 @@
 package invaders.entities;
 
+import invaders.engine.ConfigReader;
 import invaders.logic.Damagable;
 import invaders.physics.Collider;
 import invaders.physics.Moveable;
@@ -23,6 +24,7 @@ public class Enemy implements Moveable, Damagable, Renderable, Collider {
     private final double projectileXOffset = 10;
     private final double projectileYOffset = 30;
     private Projectile enemyProjectile;
+    public boolean moveRight = true;
 
     public Enemy(Vector2D position, String projectileType){
         this.image = new Image(new File("src/main/resources/enemy.png").toURI().toString(), width, height, false, true);
@@ -52,17 +54,25 @@ public class Enemy implements Moveable, Damagable, Renderable, Collider {
 
     @Override
     public void down() {
-        return;
+        this.position.setY(this.position.getY() + 10);
     }
 
     @Override
     public void left() {
-//        this.position.setX(this.position.getX() - 1);
+        this.position.setX(this.position.getX() - 1);
     }
 
     @Override
     public void right() {
-//        this.position.setX(this.position.getX() + 1);
+        this.position.setX(this.position.getX() + 1);
+    }
+
+    public void moveSideways() {
+        if (moveRight) {
+            right();
+        } else {
+            left();
+        }
     }
 
     public void shoot(){
@@ -104,5 +114,15 @@ public class Enemy implements Moveable, Damagable, Renderable, Collider {
 
     public void setEnemyProjectile(Projectile enemyProjectile) {
         this.enemyProjectile = enemyProjectile;
+    }
+
+    public boolean shouldChangeDirection() {
+        ConfigReader configReader = new ConfigReader();
+        return (moveRight && this.getPosition().getX() + width >= configReader.getGameSizeX() - 1) ||
+                (!moveRight && this.getPosition().getX() <= 1);
+    }
+
+    public void changeDirection() {
+        moveRight = !moveRight;
     }
 }
