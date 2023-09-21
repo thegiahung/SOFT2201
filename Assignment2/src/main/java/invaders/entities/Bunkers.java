@@ -12,28 +12,27 @@ import java.io.File;
 public class Bunkers implements Damagable, Renderable, Collider {
     private final Vector2D position;
     private final Animator anim = null;
-    private double health = 100;
+    private double health;
     private double width;
     private double height;
     private Image image;
-    private BunkerState currenState;
-    private double hits; // Number of hits received
+    private BunkerState currentState;
 
     public Bunkers(Vector2D position, double width, double height){
         this.width = width;
         this.height = height;
         this.image = new Image(new File("src/main/resources/bunker.png").toURI().toString(), width, height, false, true);
         this.position = position;
-        this.currenState = new GreenBunkerState(this);
+        this.currentState = new GreenBunkerState(this);
     }
 
     public void setState(BunkerState state) {
-        this.currenState = state;
+        this.currentState = state;
     }
 
     @Override
     public void takeDamage(double hits) {
-        currenState.handleDamage();
+        currentState.handleDamage();
     }
 
     @Override
@@ -76,7 +75,7 @@ public class Bunkers implements Damagable, Renderable, Collider {
         // Implement this method to set the bunker image
     }
 
-    public BunkerState getCurrenState() {
-        return currenState;
+    public BunkerState getCurrentState() {
+        return currentState;
     }
 }

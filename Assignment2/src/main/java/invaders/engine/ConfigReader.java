@@ -36,52 +36,6 @@ public class ConfigReader {
 			// convert Object to JSONObject
 			 jsonObject = (JSONObject) object;
 
-//			// reading the Game section:
-//			JSONObject jsonGame = (JSONObject) jsonObject.get("Game");
-//
-//			// reading a coordinate from the nested section within the game
-//			// note that the game x and y are of type Long (i.e. they are integers)
-//			Long gameX = (Long) ((JSONObject) jsonGame.get("size")).get("x");
-//			Long gameY = (Long) ((JSONObject) jsonGame.get("size")).get("y");
-//
-//			// reading the Player section
-//			JSONObject jsonPlayer = (JSONObject) jsonObject.get("Player");
-//			String colour = (String) (jsonPlayer.get("colour")); // player colour state
-//			Long speed = (Long) (jsonPlayer.get("speed")); // player speed
-//			Long lives = (Long) (jsonPlayer.get("lives")); // player lives
-//			Long playerX = (Long) ((JSONObject) jsonPlayer.get("position")).get("x"); // X position of player
-//			Long playerY = (Long) ((JSONObject) jsonPlayer.get("position")).get("y"); // Y position of player
-//
-//			// reading the "Enemies" array:
-//			JSONArray jsonEnemies = (JSONArray) jsonObject.get("Enemies");
-//
-//			// reading from the array:
-//			for (Object obj : jsonEnemies) {
-//				JSONObject jsonEnemy = (JSONObject) obj;
-//
-//				// the enemy position is a double
-//				Double positionX = (Double) ((JSONObject) jsonEnemy.get("position")).get("x");
-//				Double positionY = (Double) ((JSONObject) jsonEnemy.get("position")).get("y");
-//
-//				String projectileStrategy = (String) jsonEnemy.get("projectile");
-//			}
-//
-//			// Reading the Bunkers section
-//			JSONArray jsonBunkers = (JSONArray) jsonObject.get("Bunkers");
-//
-//			for (Object bunkerObject : jsonBunkers) {
-//				JSONObject jsonBunker = (JSONObject) bunkerObject;
-//
-//				// Getting position and size for each bunker
-//				JSONObject position = (JSONObject) jsonBunker.get("position");
-//				Long bunkerX = (Long) position.get("x");
-//				Long bunkerY = (Long) position.get("y");
-//
-//				JSONObject size = (JSONObject) jsonBunker.get("size");
-//				Long SizeX = (Long) size.get("x");
-//				Long SizeY = (Long) size.get("y");
-//			}
-
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

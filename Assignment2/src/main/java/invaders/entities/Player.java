@@ -106,8 +106,4 @@ public class Player implements Moveable, Damagable, Renderable {
     public void setPlayerProjectile(PlayerProjectile playerProjectile) {
         this.playerProjectile = playerProjectile;
     }
-
-    public double getProjectileOffset() {
-        return projectileOffset;
-    }
 }

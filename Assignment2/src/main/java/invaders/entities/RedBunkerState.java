@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 import java.io.File;
 
 public class RedBunkerState extends BunkerState {
-    Bunkers bunkers;
+    private Bunkers bunkers;
 
     public RedBunkerState(Bunkers bunkers) {
         this.bunkers = bunkers;

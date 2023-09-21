@@ -6,7 +6,7 @@ import java.io.File;
 
 public class GreenBunkerState extends BunkerState {
     private String image = "src/main/resources/yellow_bunker.png";
-    Bunkers bunkers;
+    private Bunkers bunkers;
 
     public GreenBunkerState(Bunkers bunkers) {
         this.bunkers = bunkers;

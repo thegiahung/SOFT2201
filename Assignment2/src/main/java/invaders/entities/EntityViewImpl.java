@@ -30,12 +30,6 @@ public class EntityViewImpl implements EntityView {
 
     @Override
     public void update(double xViewportOffset, double yViewportOffset) {
-        // Hung implementation
-        if (position.getY() < 0 || position.getY() > 800) {
-            markForDelete(); // Mark for deletion when it reaches the top or bottom for projectile
-            return; // Skip further processing
-        }
-
         if (!node.getImage().equals(entity.getImage())) {
             node.setImage(entity.getImage());
         }

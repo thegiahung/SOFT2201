@@ -174,7 +174,7 @@ public class GameEngine {
 		// Remove bunkers if it hit when in red state
 		if (bunker_remove != null) {
 			bunker_remove.takeDamage(2.0);
-			if (bunker_remove.getCurrenState() == null) {
+			if (bunker_remove.getCurrentState() == null) {
 				renderables.remove(bunker_remove);
 			}
 		}
@@ -208,7 +208,6 @@ public class GameEngine {
 	public List<Renderable> getRenderables(){
 		return renderables;
 	}
-
 
 	public void leftReleased() {
 		this.left = false;
