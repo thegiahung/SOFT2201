@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 
 import java.io.File;
 
-public class EnemyFastProjectile implements Projectile, Renderable, Moveable, Collider {
+public class EnemyFastProjectile implements Projectile {
     private Vector2D position;
     private double speed;
     private final double width = 5;
@@ -57,12 +57,10 @@ public class EnemyFastProjectile implements Projectile, Renderable, Moveable, Co
 
     @Override
     public void left() {
-
     }
 
     @Override
     public void right() {
-
     }
 
     public double getSpeed() {
