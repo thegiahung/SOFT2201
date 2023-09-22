@@ -1,6 +1,7 @@
 package invaders.entities;
 
 import invaders.logic.Damagable;
+import invaders.physics.Collider;
 import invaders.physics.Moveable;
 import invaders.physics.Vector2D;
 import invaders.rendering.Animator;
@@ -10,11 +11,11 @@ import javafx.scene.image.Image;
 
 import java.io.File;
 
-public class Player implements Moveable, Damagable, Renderable {
+public class Player implements Moveable, Damagable, Renderable, Collider {
 
     private final Vector2D position;
     private final Animator anim = null;
-    private double health = 100;
+    private double health = 3;
 
     private final double width = 25;
     private final double height = 30;
