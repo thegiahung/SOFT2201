@@ -107,4 +107,5 @@ public class Player implements Moveable, Damagable, Renderable, Collider {
     public void setPlayerProjectile(PlayerProjectile playerProjectile) {
         this.playerProjectile = playerProjectile;
     }
+
 }

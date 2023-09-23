@@ -24,6 +24,7 @@ public class GameEngine {
 	private boolean right;
 	private ConfigReader configReader = new ConfigReader().parse("src/main/resources/config.json");
 	private List<Enemy> enemies;
+	private boolean gameEnd = false;
 	public int enemyProjectileCount = 0; // only 3 enemies' projectile allow on screen
 
 	public GameEngine(String config){
@@ -137,6 +138,16 @@ public class GameEngine {
 		for (Renderable ro1 : renderables) {
 			if (ro1 instanceof Projectile projectile) {
 				for (Renderable ro2 : renderables) {
+					if ((ro1 instanceof EnemySlowProjectile) || (ro1 instanceof EnemyFastProjectile)) {
+						if (ro2 instanceof PlayerProjectile) {
+							if (((Projectile) ro1).isColliding((Projectile)ro2)) {
+								roToDelete.add(ro1);
+								roToDelete.add(ro2);
+
+								player.setPlayerProjectile(null);
+							}
+						}
+					}
 					if (ro2 instanceof Bunkers bunkers) {
 						if (bunkers.isColliding(projectile)) {
 							roToDelete.add(ro1);
@@ -150,9 +161,13 @@ public class GameEngine {
 							roToDelete.add(ro2);
 						}
 					}
-					if (ro2 instanceof  Player player && projectile instanceof EnemyFastProjectile && projectile instanceof EnemySlowProjectile) {
+					if (ro2 instanceof  Player player && (projectile instanceof EnemyFastProjectile || projectile instanceof EnemySlowProjectile)) {
 						if (player.isColliding(projectile)) {
-							roToDelete.add(ro2);
+							roToDelete.add(projectile);
+							player.takeDamage(1);
+							if (player.getHealth() <= 0) {
+								roToDelete.add(ro2);
+							}
 						}
 					}
 				}
@@ -171,7 +186,9 @@ public class GameEngine {
 
 					if (ro2 instanceof Player player) {
 						if (enemy.isColliding(player)) {
+							player.takeDamage(3);
 							roToDelete.add(ro2);
+							roToDelete.add(enemy);
 						}
 					}
 				}
@@ -197,6 +214,7 @@ public class GameEngine {
 
 	/**
 	 * Delete Player's/Enemy's projectile in the game
+	 * End game if Enemy reach the end of the screen
 	 */
 	private void deleteProjectile() {
 		Iterator<Renderable> it = renderables.iterator();
@@ -215,6 +233,11 @@ public class GameEngine {
 				if (ro.getPosition().getY() >= configReader.getGameSizeY()) {
 					it.remove();
 					enemyProjectileCount -=1;
+				}
+			}
+			if (ro instanceof  Enemy enemy) {
+				if (ro.getPosition().getY() >= configReader.getGameSizeY()) {
+					player.takeDamage(3);
 				}
 			}
 		}
@@ -256,6 +279,15 @@ public class GameEngine {
 		}
 	}
 
+	public boolean winGame() {
+		for (Renderable ro: renderables) {
+			if (ro instanceof Enemy) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public List<Renderable> getRenderables(){
 		return renderables;
 	}
@@ -290,5 +322,7 @@ public class GameEngine {
 		}
 	}
 
-
+	public Player getPlayer() {
+		return player;
+	}
 }
