@@ -11,6 +11,9 @@ public class RedBunkerState extends BunkerState {
         this.bunkers = bunkers;
     }
 
+    /**
+     * Use the State pattern to change the color
+     */
     @Override
     public void handleDamage() {
         bunkers.setState(null);

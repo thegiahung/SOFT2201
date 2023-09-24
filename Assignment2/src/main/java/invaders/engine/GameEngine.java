@@ -1,9 +1,6 @@
 package invaders.engine;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import invaders.GameObject;
 import invaders.entities.*;
@@ -94,7 +91,7 @@ public class GameEngine {
 			if(!ro.getLayer().equals(Renderable.Layer.FOREGROUND)){
 				continue;
 			}
-			
+
 			if (!(ro instanceof Projectile)) {
 				if(ro.getPosition().getX() + ro.getWidth() >= gameSizeX) {
 					ro.getPosition().setX((gameSizeX-1)-ro.getWidth());
@@ -130,11 +127,13 @@ public class GameEngine {
 	}
 
 	/**
-	 * Delete Bunker/Enemy once it hit projectile
+	 * Handle deletion for Bunker/Enemy collision and deletion logic
+	 * End game if player health is less than or equal to 0
 	 */
 	private void deleteObjectGame() {
 		List<Renderable> roToDelete = new ArrayList<>();
 		Bunkers bunker_remove = null;
+
 		for (Renderable ro1 : renderables) {
 			if (ro1 instanceof Projectile projectile) {
 				for (Renderable ro2 : renderables) {
@@ -143,11 +142,11 @@ public class GameEngine {
 							if (((Projectile) ro1).isColliding((Projectile)ro2)) {
 								roToDelete.add(ro1);
 								roToDelete.add(ro2);
-
 								player.setPlayerProjectile(null);
 							}
 						}
 					}
+					// Change bunker state if it hit the projectile
 					if (ro2 instanceof Bunkers bunkers) {
 						if (bunkers.isColliding(projectile)) {
 							roToDelete.add(ro1);
@@ -155,12 +154,13 @@ public class GameEngine {
 							bunker_remove = bunkers;
 						}
 					}
-
+					// Kill enemy if it hit by player's projectile
 					if (ro2 instanceof Enemy enemy && projectile instanceof PlayerProjectile) {
 						if (enemy.isColliding(projectile)) {
 							roToDelete.add(ro2);
 						}
 					}
+					// Decrease Player's health once it get hit by Enemy's projectile
 					if (ro2 instanceof  Player player && (projectile instanceof EnemyFastProjectile || projectile instanceof EnemySlowProjectile)) {
 						if (player.isColliding(projectile)) {
 							roToDelete.add(projectile);
@@ -174,6 +174,8 @@ public class GameEngine {
 			}
 		}
 
+		// Remove the bunkers it hit the enemy
+		// End game by set player health to 0 once get hit by Enemy
 		for (Renderable ro1 : renderables) {
 			if (ro1 instanceof Enemy enemy) {
 				for (Renderable ro2 : renderables) {
@@ -197,9 +199,18 @@ public class GameEngine {
 
 		// Remove the elements collected for deletion
 		for (Renderable ro: roToDelete) {
+			if (!renderables.contains(ro)) {
+				continue;
+			}
 			renderables.remove(ro);
+			if (ro instanceof Enemy enemy) {
+				increaseEnemySpeed();
+			}
 			if (ro instanceof EnemyFastProjectile || ro instanceof EnemySlowProjectile) {
 				enemyProjectileCount -=1;
+				if (enemyProjectileCount <= 0) {
+					enemyProjectileCount = 0;
+				}
 			}
 		}
 
@@ -212,6 +223,18 @@ public class GameEngine {
 		}
 	}
 
+
+	/**
+	 * Increase the enemy speed when once of the enemy is killed by the player
+	 */
+	private void increaseEnemySpeed() {
+		for (Renderable ro: renderables) {
+			if (ro instanceof Enemy enemy) {
+				enemy.increaseSpeed();
+			}
+		}
+	}
+
 	/**
 	 * Delete Player's/Enemy's projectile in the game
 	 * End game if Enemy reach the end of the screen
@@ -220,14 +243,15 @@ public class GameEngine {
 		Iterator<Renderable> it = renderables.iterator();
 		while (it.hasNext()) {
 			Renderable ro = it.next();
+			// If the player projectile go out of the screen, then delete it
 			if (ro instanceof PlayerProjectile) {
 				((Moveable) ro).up();
 				if (ro.getPosition().getY()  < 0) {
 					it.remove();
 					player.setPlayerProjectile(null);
 				}
-				continue;
 			}
+			// If the enemy projectile go out of the screen, then delete it
 			if (ro instanceof EnemyFastProjectile enemyFastProjectile || ro instanceof EnemySlowProjectile enemySlowProjectile) {
 				((Moveable) ro).down();
 				if (ro.getPosition().getY() >= configReader.getGameSizeY()) {
@@ -235,8 +259,9 @@ public class GameEngine {
 					enemyProjectileCount -=1;
 				}
 			}
+			// If Enemy reach the bottom of the screen then Game Over
 			if (ro instanceof  Enemy enemy) {
-				if (ro.getPosition().getY() >= configReader.getGameSizeY()) {
+				if (ro.getPosition().getY() >= configReader.getGameSizeY() - 10) {
 					player.takeDamage(3);
 				}
 			}
@@ -279,6 +304,10 @@ public class GameEngine {
 		}
 	}
 
+	/**
+	 * End the game if we win
+	 * @return boolean
+	 */
 	public boolean winGame() {
 		for (Renderable ro: renderables) {
 			if (ro instanceof Enemy) {
@@ -303,6 +332,7 @@ public class GameEngine {
 	public void leftPressed() {
 		this.left = true;
 	}
+
 	public void rightPressed(){
 		this.right = true;
 	}

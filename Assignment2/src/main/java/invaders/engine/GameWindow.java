@@ -7,6 +7,7 @@ import java.util.Set;
 
 import invaders.entities.EntityViewImpl;
 import invaders.entities.SpaceBackground;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -32,6 +33,7 @@ public class GameWindow {
     private double xViewportOffset = 0.0;
     private double yViewportOffset = 0.0;
     private static final double VIEWPORT_MARGIN = 280.0;
+    private Label livesLabel;
 
     public GameWindow(GameEngine model, int width, int height){
         this.width = width;
@@ -67,6 +69,11 @@ public class GameWindow {
             displayWin();
             return;
         }
+
+        if (livesLabel != null) {
+            pane.getChildren().remove(livesLabel);
+        }
+        displayLives();
 
         model.update();
 
@@ -131,6 +138,19 @@ public class GameWindow {
     public void displayLose() {
         Label loseLabel = createCenteredLabel("You Lose!");
         pane.getChildren().add(loseLabel);
+    }
+
+    public void displayLives() {
+        livesLabel = createLivesLabel(); // Create the label
+        pane.getChildren().add(livesLabel); // Add it to the pane
+    }
+
+    private Label createLivesLabel() {
+        Label label = new Label("Lives: " + model.getPlayer().getHealth());
+        label.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        label.setLayoutX(10); // Adjust X position as needed
+        label.setLayoutY(10); // Adjust Y position as needed
+        return label;
     }
 
     private Label createCenteredLabel(String text) {

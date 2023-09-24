@@ -113,25 +113,4 @@ public class ConfigReader {
 		}
 		return bunkers;
 	}
-
-//	/**
-//	 * Your main method will probably be in another file!
-//	 *
-//	 * @param args First argument is the path to the config file
-//	 */
-//	public static void main(String[] args) {
-//		// if a command line argument is provided, that should be used as the path
-//		// if not, you can hard-code a default. e.g. "src/main/resources/config.json"
-//		// this makes it easier to test your program with different config files
-//		String configPath;
-//		if (args.length > 0) {
-////			configPath = args[0];
-//			configPath = "src/main/resources/" + args[0];
-//		} else {
-//			configPath = "src/main/resources/config.json";
-//		}
-//		// parse the file:
-//		ConfigReader.parse(configPath);
-//	}
-
 }

@@ -13,16 +13,6 @@ public class App extends Application {
 
     public static void main(String[] args) {
         launch(args);
-        // Hung implementation
-//        String configPath;
-//        if (args.length > 0) {
-////			configPath = args[0];
-//            configPath = "src/main/resources/" + args[0];
-//        } else {
-//            configPath = "src/main/resources/config.json";
-//        }
-//        // parse the file:
-//        ConfigReader.parse(configPath);
     }
 
     @Override
